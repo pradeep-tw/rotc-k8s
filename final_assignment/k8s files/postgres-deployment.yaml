@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
+  namespace: crud-app
   labels:
     app: postgres
 spec:
@@ -30,8 +31,9 @@ spec:
                   name: postgres-secret
                   key: password
           volumeMounts:
-            - name: postgres-data
+            - name: host-storage
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: postgres-data
-          emptyDir: {}
+        - name: host-storage
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
